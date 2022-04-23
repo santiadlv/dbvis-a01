@@ -112,12 +112,10 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
 /* Helper function to retrieve important statistics */
 function getMaxFromArrayOfObjects(attributeName, arrOfObjects) {
   /** TASK 3.1: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-
-  return max;
+  return (arrOfObjects.reduce((previousValue, currentValue) => previousValue[attributeName] > currentValue[attributeName] ? previousValue : currentValue))[attributeName];
 }
 
 function getMinFromArrayOfObjects(attributeName, arrOfObjects) {
   /* TASK 3.2: Write the code for the helper functions getMinFromArrayOfObjects and getMaxFromArrayOfObjects! */
-
-  return min;
+  return (arrOfObjects.reduce((previousValue, currentValue) => previousValue[attributeName] < currentValue[attributeName] ? previousValue : currentValue))[attributeName];
 }
