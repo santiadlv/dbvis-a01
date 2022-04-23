@@ -19,6 +19,7 @@
 const svgNamespace = "http://www.w3.org/2000/svg";
 
 /* TASK 1: Retrieve the node of the div element declared within the index.html by its identifier and save it to a variable that we will use later */
+var graph = document.getElementById("graph");
 
 // Specify margins such that the visualization is clearly visible and no elements are invisible due to the svg border
 const margins = {
