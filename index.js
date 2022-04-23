@@ -66,6 +66,8 @@ document.getElementById("header").appendChild(yearRange);
 // Data Preparation: For each year we want the average rain and temperature
 // We intialize an empty array 'avgData' which will hold the average values and the respective years
 const avgDataPerYear = [];
+const rainAttr = "pr";
+const tempAttr = "tas";
 for (i = 0; i < maxYear - minYear + 1; i++) {
   /**
    * TASK 5: Calculate the average temperature and precipitation for every year.
@@ -77,6 +79,15 @@ for (i = 0; i < maxYear - minYear + 1; i++) {
    *    rain: 0,
    * });
    */
+  var dataPerYear = data.filter((datapoint) => datapoint.Year === (minYear + i));
+  const avgRain = (dataPerYear.reduce((previousDatapoint, currentDatapoint) => previousDatapoint + currentDatapoint[rainAttr], 0) / dataPerYear.length);
+  const avgTemp = (dataPerYear.reduce((previousDatapoint, currentDatapoint) => previousDatapoint + currentDatapoint[tempAttr], 0) / dataPerYear.length);
+
+  avgDataPerYear.push({
+    year : minYear + i,
+    temperature : avgTemp,
+    rain : avgRain
+  });
 }
 
 // Check the browser console to see how the data looks like
