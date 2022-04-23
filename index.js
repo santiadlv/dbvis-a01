@@ -36,6 +36,10 @@ const visWidth = width - margins.left - margins.right;
 const visHeight = height - margins.top - margins.bottom;
 
 /* TASK 2: Create an svg element, set its width and height in pixels (via the 'element.style' attribute), and add it to the vis-container. Save the svg element in a variable called 'svg' */
+var svg = document.createElementNS(svgNamespace, "svg");
+svg.setAttribute("width", width);
+svg.setAttribute("height", height);
+graph.appendChild(svg);
 
 // We add a group element to the svg to set the margin by translating the group.
 // All visual elements which are part of the line-chart need to be added to the group.
