@@ -59,6 +59,9 @@ const pixelsPerYear = visWidth / (maxYear - minYear + 1);
  * The text of the <h2> element should be `From the years <minyear> to <maxyear>`
  * <minyear> and <maxyear> should be replaced with the real values from line 49 and 50.
  */
+var yearRange = document.createElement("h2");
+yearRange.textContent(`From the years ${minYear} to ${maxYear}`);
+document.getElementById("header").appendChild(yearRange);
 
 // Data Preparation: For each year we want the average rain and temperature
 // We intialize an empty array 'avgData' which will hold the average values and the respective years
