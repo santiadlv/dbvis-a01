@@ -60,7 +60,8 @@ const pixelsPerYear = visWidth / (maxYear - minYear + 1);
  * <minyear> and <maxyear> should be replaced with the real values from line 49 and 50.
  */
 var yearRange = document.createElement("h2");
-yearRange.textContent(`From the years ${minYear} to ${maxYear}`);
+let yearText = document.createTextNode(`From the years ${minYear} to ${maxYear}`);
+yearRange.appendChild(yearText);
 document.getElementById("header").appendChild(yearRange);
 
 // Data Preparation: For each year we want the average rain and temperature
@@ -105,6 +106,24 @@ TASK 6: Transform the data points to their respective screen coordinates.
 2. For each element in the array, determine the X position and the Y positions for rain and temperature
 3. Add the resulting transformed point to the 'transformedPoints' array
 */
+avgDataPerYear.forEach(datapoint => {
+  var xPos = (datapoint.Year - minYear + 1) * (pixelsPerYear / 2);
+  var yPosRain = scalePoint(datapoint["rain"], (minRain, maxRain), (0, visHeight));
+  var yPosTemp = scalePoint(datapoint["rain"], (minTemp, maxTemp), (0, visHeight));
+
+  transformedPoints.push({
+    xr : xPos,
+    yr : yPosRain,
+    xt : xPos,
+    yt : yPosTemp,
+  });
+});
+
+function scalePoint(yPos, domain, range) {
+  const scaleFactor = (range[1] - range[0] / domain[1] - domain[0]);
+  return (yPos - domain[0]) * scaleFactor + domain[1];
+}
+
 
 /*
 TASK 7: Add the points to the screen
