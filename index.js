@@ -124,7 +124,6 @@ function scalePoint(yPos, domain, range) {
   return (yPos - domain[0]) * scaleFactor + domain[1];
 }
 
-
 /*
 TASK 7: Add the points to the screen
 1. Use a loop to iterate through the 'transformedPoints' array
@@ -133,6 +132,20 @@ TASK 7: Add the points to the screen
     - Set their 'cx', 'cy', and 'r' attribute
     - Add them to the visG group
  */
+
+transformedPoints.forEach(datapoint => {
+  var rainPoint = document.createElementNS(svgNamespace, "circle");
+  tempPoint.setAttribute("cx", datapoint.xr);
+  tempPoint.setAttribute("cy", datapoint.yr);
+  tempPoint.setAttribute("r", 5);
+  visG.appendChild(rainPoint);
+
+  var tempPoint = document.createElementNS(svgNamespace, "circle");
+  tempPoint.setAttribute("cx", datapoint.xt);
+  tempPoint.setAttribute("cy", datapoint.yt);
+  tempPoint.setAttribute("r", 5);
+  visG.appendChild(tempPoint);
+});
 
 /*
 TASK 8: Add lines to the visualization. Use polylines to connect the previously created points.
