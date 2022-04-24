@@ -69,7 +69,7 @@ document.getElementById("header").appendChild(yearRange);
 const avgDataPerYear = [];
 const rainAttr = "pr";
 const tempAttr = "tas";
-for (i = 0; i < maxYear - minYear + 1; i++) {
+for (let i = 0; i < maxYear - minYear + 1; i++) {
   /**
    * TASK 5: Calculate the average temperature and precipitation for every year.
    * Add the values to the avgDataPerYear array.
@@ -97,7 +97,7 @@ console.log("Dataset:", avgDataPerYear);
 // Calculate necessary statistics to transform datapoints to screen coordinates
 const maxTemp = getMaxFromArrayOfObjects("temperature", avgDataPerYear);
 const minTemp = getMinFromArrayOfObjects("temperature", avgDataPerYear);
-const minRain = 0;
+const minRain = getMinFromArrayOfObjects("rain", avgDataPerYear); //0;
 const maxRain = getMaxFromArrayOfObjects("rain", avgDataPerYear);
 
 /*
@@ -107,9 +107,9 @@ TASK 6: Transform the data points to their respective screen coordinates.
 3. Add the resulting transformed point to the 'transformedPoints' array
 */
 avgDataPerYear.forEach(datapoint => {
-  var xPos = (datapoint.Year - minYear + 1) * (pixelsPerYear / 2);
-  var yPosRain = scalePoint(datapoint["rain"], (minRain, maxRain), (0, visHeight));
-  var yPosTemp = scalePoint(datapoint["rain"], (minTemp, maxTemp), (0, visHeight));
+  var xPos = (datapoint.year - minYear + 1) * (pixelsPerYear / 2);
+  var yPosRain = scalePoint(datapoint.rain, [minRain, maxRain], [0, visHeight]);
+  var yPosTemp = scalePoint(datapoint.temperature, [minTemp, maxTemp], [0, visHeight]);
 
   transformedPoints.push({
     xr : xPos,
@@ -120,7 +120,7 @@ avgDataPerYear.forEach(datapoint => {
 });
 
 function scalePoint(yPos, domain, range) {
-  const scaleFactor = (range[1] - range[0] / domain[1] - domain[0]);
+  const scaleFactor = (range[1] - range[0]) / (domain[1] - domain[0]);
   return (yPos - domain[0]) * scaleFactor + domain[1];
 }
 
