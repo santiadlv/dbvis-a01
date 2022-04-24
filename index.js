@@ -97,7 +97,7 @@ console.log("Dataset:", avgDataPerYear);
 // Calculate necessary statistics to transform datapoints to screen coordinates
 const maxTemp = getMaxFromArrayOfObjects("temperature", avgDataPerYear);
 const minTemp = getMinFromArrayOfObjects("temperature", avgDataPerYear);
-const minRain = getMinFromArrayOfObjects("rain", avgDataPerYear); //0;
+const minRain = 0;
 const maxRain = getMaxFromArrayOfObjects("rain", avgDataPerYear);
 
 /*
@@ -107,22 +107,23 @@ TASK 6: Transform the data points to their respective screen coordinates.
 3. Add the resulting transformed point to the 'transformedPoints' array
 */
 avgDataPerYear.forEach(datapoint => {
-  var xPos = (datapoint.year - minYear + 1) * (pixelsPerYear / 2);
-  var yPosRain = scalePoint(datapoint.rain, [minRain, maxRain], [0, visHeight]);
-  var yPosTemp = scalePoint(datapoint.temperature, [minTemp, maxTemp], [0, visHeight]);
+  var xPos = (pixelsPerYear / 2) + (datapoint.year - minYear) * (pixelsPerYear);
+  var yPosRain = visHeight - scalePoint(datapoint.rain, [minRain, maxRain], [0, visHeight]);
+  var yPosTemp = visHeight - scalePoint(datapoint.temperature, [minTemp, maxTemp], [0, visHeight]);
 
   transformedPoints.push({
     xr : xPos,
     yr : yPosRain,
     xt : xPos,
-    yt : yPosTemp,
+    yt : yPosTemp
   });
 });
 
 function scalePoint(yPos, domain, range) {
-  const scaleFactor = (range[1] - range[0]) / (domain[1] - domain[0]);
-  return (yPos - domain[0]) * scaleFactor + domain[1];
+  return (range[1] - range[0]) * ((yPos - domain[0]) / (domain[1] - domain[0])) + range[0];
 }
+
+console.log("Dataset:", transformedPoints);
 
 /*
 TASK 7: Add the points to the screen
@@ -135,15 +136,17 @@ TASK 7: Add the points to the screen
 
 transformedPoints.forEach(datapoint => {
   var rainPoint = document.createElementNS(svgNamespace, "circle");
-  tempPoint.setAttribute("cx", datapoint.xr);
-  tempPoint.setAttribute("cy", datapoint.yr);
-  tempPoint.setAttribute("r", 5);
+  rainPoint.setAttribute("class", "rain-point");
+  rainPoint.setAttribute("cx", datapoint.xr);
+  rainPoint.setAttribute("cy", datapoint.yr);
+  rainPoint.setAttribute("r", 3);
   visG.appendChild(rainPoint);
 
   var tempPoint = document.createElementNS(svgNamespace, "circle");
+  tempPoint.setAttribute("class", "temp-point");
   tempPoint.setAttribute("cx", datapoint.xt);
   tempPoint.setAttribute("cy", datapoint.yt);
-  tempPoint.setAttribute("r", 5);
+  tempPoint.setAttribute("r", 3);
   visG.appendChild(tempPoint);
 });
 
@@ -154,6 +157,27 @@ TASK 8: Add lines to the visualization. Use polylines to connect the previously 
    You can make use of JavaScripts Array.prototype.map() function to extract the coordinates as an array.
 3. Add the polyline to visG group
 */
+var rainLine = document.createElementNS(svgNamespace, "polyline");
+rainLine.setAttribute("id", "rainline");
+var tempLine = document.createElementNS(svgNamespace, "polyline");
+tempLine.setAttribute("id", "templine");
+
+var rainString = "";
+var rainPoints = Array.from(visG.getElementsByClassName("rain-point"));
+rainPoints.forEach(point => {
+  rainString += `${point.getAttribute("cx")}, ${point.getAttribute("cy")} `;
+});
+rainLine.setAttribute("points", rainString);
+
+var tempString = "";
+var tempPoints = Array.from(visG.getElementsByClassName("temp-point"));
+tempPoints.forEach(point => {
+  tempString += `${point.getAttribute("cx")}, ${point.getAttribute("cy")} `;
+});
+tempLine.setAttribute("points", tempString);
+
+visG.appendChild(rainLine);
+visG.appendChild(tempLine);
 
 /* Helper function to retrieve important statistics */
 function getMaxFromArrayOfObjects(attributeName, arrOfObjects) {
